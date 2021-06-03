@@ -21,6 +21,9 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.print.PrintAttributes;
+import android.print.pdf.PrintedPdfDocument;
+import android.printservice.PrintDocument;
 import android.util.Log;
 import android.view.Display;
 import android.view.View;
@@ -37,105 +40,108 @@ import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
 
-    Button btnPrint;
-    ImageView img;
-    Display mDisplay;
-    String imagesUri;
-    String path;
-    Bitmap bitmap;
-
-
+    private Button btnPDFActivity;
+    private Display mDisplay;
+    private String imagesUri;
+    private String path;
+    private Bitmap bitmap;
+    private int totalHeight;
+    private int totalWidth;
     public static final int READ_PHONE = 110;
-    String file_name = "Screenshot";
-    File myPath;
-    RelativeLayout lineaLayout;
+    private String file_name = "Screenshot";
+    private File myPath;
+    private View view;
+    private NestedScrollView nestedScrollView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        btnPDFActivity = findViewById(R.id.btnPDFActivity);
+        view = findViewById(R.id.ticket);
+        nestedScrollView = findViewById(R.id.ticket);
 
-
-        btnPrint = findViewById(R.id.btnPrint);
-        img = findViewById(R.id.img);
         WindowManager wm = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
         mDisplay = wm.getDefaultDisplay();
 
-        if(Build.VERSION.SDK_INT >= 23){
-            if(checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
                     && checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
                     == PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                    == PackageManager.PERMISSION_GRANTED){
-            }else{
+                    == PackageManager.PERMISSION_GRANTED) {
+            } else {
                 requestPermissions(new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE,
                         Manifest.permission.READ_EXTERNAL_STORAGE}, READ_PHONE);
             }
         }
-        btnPrint.setOnClickListener(new View.OnClickListener() {
+        btnPDFActivity.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             @Override
             public void onClick(View v) {
-//                Bitmap bitmap = getBitmapFromView(lineaLayout);
-//                img.setImageBitmap(bitmap);
+
+                btnPDFActivity.setVisibility(View.GONE);
+
                 takeScreenShot();
+
+                btnPDFActivity.setVisibility(View.VISIBLE);
             }
         });
 
     }
 
-    public Bitmap getBitmapFromView(View view, int totalHeight, int totalWidth){
 
+    public Bitmap getBitmapFromView(View view) {
+        totalHeight = nestedScrollView.getChildAt(0).getHeight();
+        totalWidth = nestedScrollView.getChildAt(0).getWidth();
         Bitmap returnedBitmap = Bitmap.createBitmap(totalWidth, totalHeight, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(returnedBitmap);
         Drawable bgDrawable = view.getBackground();
 
-        if(bgDrawable != null){
+        if (bgDrawable != null) {
             bgDrawable.draw(canvas);
-        }else{
+        } else {
             canvas.drawColor(Color.WHITE);
         }
-
         view.draw(canvas);
         return returnedBitmap;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    private void takeScreenShot(){
+    private void takeScreenShot() {
 
         File folder = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/ScreenShot/");
 
-        if(!folder.exists()){
+        if (!folder.exists()) {
             boolean success = folder.mkdir();
         }
 
         path = folder.getAbsolutePath();
         path = path + "/" + file_name + System.currentTimeMillis() + ".pdf";
 
-        lineaLayout = findViewById(R.id.lineaLayout);
+
         String extr = Environment.getExternalStorageDirectory() + "/Flight Ticket/";
         File file = new File(extr);
-        if(!file.exists())
+        if (!file.exists())
             file.mkdir();
         String fileName = file_name + ".jpg";
         myPath = new File(extr, fileName);
         imagesUri = myPath.getPath();
-        bitmap = getBitmapFromView(lineaLayout, lineaLayout.getHeight(), lineaLayout.getWidth());
+        bitmap = getBitmapFromView(view);
 
-        try{
+        try {
             FileOutputStream fos = new FileOutputStream(myPath);
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
             fos.flush();
             fos.close();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
         createPdf();
 
-
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     private void createPdf() {
+
         PdfDocument document = new PdfDocument();
         PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(bitmap.getWidth(), bitmap.getHeight(), 1).create();
         PdfDocument.Page page = document.startPage(pageInfo);
@@ -152,12 +158,11 @@ public class MainActivity extends AppCompatActivity {
         canvas.drawBitmap(bitmap, 0, 0, null);
         document.finishPage(page);
         File filePath = new File(path);
-        Log.e("File",path);
-        try{
+        try {
             document.writeTo(new FileOutputStream(filePath));
-        }catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
-            Toast.makeText(this, "Something Wrong: "+e.toString(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Something Wrong: " + e.toString(), Toast.LENGTH_SHORT).show();
         }
 
         document.close();
@@ -165,8 +170,9 @@ public class MainActivity extends AppCompatActivity {
         if (myPath.exists())
             myPath.delete();
 
-//        openPdf(path);
-
+        Intent intent = new Intent(MainActivity.this, PDFActivity.class);
+        intent.putExtra("path", path);
+        startActivity(intent);
     }
 
     private void openPdf(String path) {
@@ -176,11 +182,10 @@ public class MainActivity extends AppCompatActivity {
         target.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 
         Intent intent = Intent.createChooser(target, "Open FIle");
-        try{
+        try {
             startActivity(intent);
-        }catch (ActivityNotFoundException e){
+        } catch (ActivityNotFoundException e) {
             Toast.makeText(this, "No Apps to read PDF FIle", Toast.LENGTH_SHORT).show();
         }
     }
 }
-

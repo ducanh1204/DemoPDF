@@ -8,54 +8,79 @@
     tools:context=".MainActivity">
 
     <Button
-        android:id="@+id/btnPrint"
+        android:id="@+id/btnPDFActivity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Print" />
+        android:text="PDF Activity" />
+
     <androidx.core.widget.NestedScrollView
-        android:layout_height="match_parent"
         android:id="@+id/ticket"
-        android:layout_width="match_parent">
-
-    <LinearLayout
-        android:id="@+id/lineaLayout"
-        android:gravity="center"
-        android:background="@color/purple_200"
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <TextView
-            android:gravity="center"
-            android:layout_width="wrap_content"
-            android:layout_height="200dp"
-            android:layout_centerInParent="true"
-            android:text="Hello World!" />
-        <TextView
-            android:gravity="center"
-            android:layout_width="wrap_content"
-            android:layout_height="200dp"
-            android:layout_centerInParent="true"
-            android:text="Hello World!" />
-        <TextView
-            android:gravity="center"
-            android:layout_width="wrap_content"
-            android:layout_height="200dp"
-            android:layout_centerInParent="true"
-            android:text="Hello World!" />
-        <TextView
-            android:gravity="center"
-            android:layout_width="wrap_content"
-            android:layout_height="200dp"
-            android:layout_centerInParent="true"
-            android:text="Hello World!" />
-        <TextView
-            android:gravity="center"
-            android:layout_width="wrap_content"
-            android:layout_height="200dp"
-            android:layout_centerInParent="true"
-            android:text="Hello World!" />
+        android:layout_height="match_parent">
 
-    </LinearLayout>
+        <LinearLayout
+            android:background="@color/teal_200"
+            android:id="@+id/lineaLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_margin="10dp"
+                android:background="#FFFFFF"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:text="Hello World!" />
+
+            <TextView
+                android:layout_margin="10dp"
+                android:background="#FFFFFF"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:text="Hello World!" />
+
+            <TextView
+                android:layout_margin="10dp"
+                android:background="#FFFFFF"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:text="Hello World!" />
+
+            <TextView
+                android:layout_margin="10dp"
+                android:background="#FFFFFF"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:text="Hello World!" />
+
+            <TextView
+                android:layout_margin="10dp"
+                android:background="#FFFFFF"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:text="Hello World!" />
+            <TextView
+                android:layout_margin="10dp"
+                android:background="#FFFFFF"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:text="Hello World!" />
+
+        </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
+
 </LinearLayout>

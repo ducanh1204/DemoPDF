@@ -1,12 +1,9 @@
 package com.example.demopdf;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.widget.NestedScrollView;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -16,22 +13,13 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.graphics.pdf.PdfDocument;
-import android.media.Image;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.print.PrintAttributes;
-import android.print.pdf.PrintedPdfDocument;
-import android.printservice.PrintDocument;
-import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import java.io.File;
@@ -42,16 +30,14 @@ public class MainActivity extends AppCompatActivity {
 
     private Button btnPDFActivity;
     private Display mDisplay;
-    private String imagesUri;
     private String path;
-    private Bitmap bitmap;
     private int totalHeight;
     private int totalWidth;
     public static final int READ_PHONE = 110;
     private String file_name = "Screenshot";
-    private File myPath;
     private View view;
     private NestedScrollView nestedScrollView;
+    private Bitmap bitmap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,15 +61,9 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         btnPDFActivity.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             @Override
             public void onClick(View v) {
-
-                btnPDFActivity.setVisibility(View.GONE);
-
                 takeScreenShot();
-
-                btnPDFActivity.setVisibility(View.VISIBLE);
             }
         });
 
@@ -91,12 +71,11 @@ public class MainActivity extends AppCompatActivity {
 
 
     public Bitmap getBitmapFromView(View view) {
-        totalHeight = nestedScrollView.getChildAt(0).getHeight();
         totalWidth = nestedScrollView.getChildAt(0).getWidth();
+        totalHeight = nestedScrollView.getChildAt(0).getHeight();
         Bitmap returnedBitmap = Bitmap.createBitmap(totalWidth, totalHeight, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(returnedBitmap);
         Drawable bgDrawable = view.getBackground();
-
         if (bgDrawable != null) {
             bgDrawable.draw(canvas);
         } else {
@@ -107,56 +86,30 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void takeScreenShot() {
-
-        File folder = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/ScreenShot/");
-
+        File folder = new File(Environment.getExternalStorageDirectory() + "/FilePdfs/");
         if (!folder.exists()) {
             boolean success = folder.mkdir();
         }
-
         path = folder.getAbsolutePath();
         path = path + "/" + file_name + System.currentTimeMillis() + ".pdf";
-
-
-        String extr = Environment.getExternalStorageDirectory() + "/Flight Ticket/";
-        File file = new File(extr);
-        if (!file.exists())
-            file.mkdir();
-        String fileName = file_name + ".jpg";
-        myPath = new File(extr, fileName);
-        imagesUri = myPath.getPath();
         bitmap = getBitmapFromView(view);
-
-        try {
-            FileOutputStream fos = new FileOutputStream(myPath);
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
-            fos.flush();
-            fos.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
         createPdf();
-
     }
 
     private void createPdf() {
+        Paint paint = new Paint();
+        paint.setColor(Color.parseColor("#ffffff"));
 
         PdfDocument document = new PdfDocument();
         PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(bitmap.getWidth(), bitmap.getHeight(), 1).create();
         PdfDocument.Page page = document.startPage(pageInfo);
-
         Canvas canvas = page.getCanvas();
-
-        Paint paint = new Paint();
-        paint.setColor(Color.parseColor("#ffffff"));
         canvas.drawPaint(paint);
-
         Bitmap bitmap = Bitmap.createScaledBitmap(this.bitmap, this.bitmap.getWidth(), this.bitmap.getHeight(), true);
-
         paint.setColor(Color.BLUE);
         canvas.drawBitmap(bitmap, 0, 0, null);
         document.finishPage(page);
+
         File filePath = new File(path);
         try {
             document.writeTo(new FileOutputStream(filePath));
@@ -167,25 +120,11 @@ public class MainActivity extends AppCompatActivity {
 
         document.close();
 
-        if (myPath.exists())
-            myPath.delete();
 
         Intent intent = new Intent(MainActivity.this, PDFActivity.class);
         intent.putExtra("path", path);
         startActivity(intent);
     }
 
-    private void openPdf(String path) {
-        File file = new File(path);
-        Intent target = new Intent(Intent.ACTION_VIEW);
-        target.setDataAndType(Uri.fromFile(file), "application/pdf");
-        target.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-
-        Intent intent = Intent.createChooser(target, "Open FIle");
-        try {
-            startActivity(intent);
-        } catch (ActivityNotFoundException e) {
-            Toast.makeText(this, "No Apps to read PDF FIle", Toast.LENGTH_SHORT).show();
-        }
-    }
 }
+

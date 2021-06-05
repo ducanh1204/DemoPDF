@@ -97,6 +97,24 @@
                 android:layout_margin="10dp"
                 android:gravity="start"
                 android:text="Thái Bình có 1 bệnh nhân 8076, nữ, 75 tuổi, ở huyện Kiến Xương, liên quan đến ổ dịch cũ, đã được cách ly. Kết quả xét nghiệm ngày 3/6 của bệnh nhân dương tính với SARS-CoV-2. Hiện người này điều trị tại Bệnh viện Đa khoa tỉnh Thái Bình." />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:gravity="start"
+                android:text="Thái Bình có 1 bệnh nhân 8076, nữ, 75 tuổi, ở huyện Kiến Xương, liên quan đến ổ dịch cũ, đã được cách ly. Kết quả xét nghiệm ngày 3/6 của bệnh nhân dương tính với SARS-CoV-2. Hiện người này điều trị tại Bệnh viện Đa khoa tỉnh Thái Bình." />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:gravity="start"
+                android:text="Thái Bình có 1 bệnh nhân 8076, nữ, 75 tuổi, ở huyện Kiến Xương, liên quan đến ổ dịch cũ, đã được cách ly. Kết quả xét nghiệm ngày 3/6 của bệnh nhân dương tính với SARS-CoV-2. Hiện người này điều trị tại Bệnh viện Đa khoa tỉnh Thái Bình." />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:gravity="start"
+                android:text="Thái Bình có 1 bệnh nhân 8076, nữ, 75 tuổi, ở huyện Kiến Xương, liên quan đến ổ dịch cũ, đã được cách ly. Kết quả xét nghiệm ngày 3/6 của bệnh nhân dương tính với SARS-CoV-2. Hiện người này điều trị tại Bệnh viện Đa khoa tỉnh Thái Bình." />
 
             <TextView
                 android:layout_width="match_parent"

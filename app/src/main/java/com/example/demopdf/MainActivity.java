@@ -1,9 +1,12 @@
 package com.example.demopdf;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.widget.NestedScrollView;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -22,6 +25,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.Toast;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -38,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
     private View view;
     private NestedScrollView nestedScrollView;
     private Bitmap bitmap;
+    private byte [] imageByteArray;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,9 +69,19 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 takeScreenShot();
+
+                Bitmap bitmapa = Bitmap.createBitmap(totalWidth, totalHeight, Bitmap.Config.ARGB_8888);
+                Canvas canvas = new Canvas(bitmapa);
+                nestedScrollView.draw(canvas);
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                bitmapa.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                imageByteArray = stream.toByteArray();
+                Intent intent = new Intent(MainActivity.this, PDFActivity.class);
+                intent.putExtra("path", path);
+                intent.putExtra("imageByteArray",imageByteArray);
+                startActivity(intent);
             }
         });
-
     }
 
 
@@ -119,12 +134,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
         document.close();
-
-
-        Intent intent = new Intent(MainActivity.this, PDFActivity.class);
-        intent.putExtra("path", path);
-        startActivity(intent);
     }
-
 }
 

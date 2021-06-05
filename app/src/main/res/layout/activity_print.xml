@@ -3,20 +3,24 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:orientation="vertical"
     android:layout_height="match_parent"
-    tools:context=".PDFActivity">
+    android:orientation="vertical"
+    tools:context=".PrintActivity">
 
     <Button
-        android:textAllCaps="false"
-        android:text="Print width bluetooth"
+        android:id="@+id/btnPrint"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/btnPrint"/>
+        android:text="Print" />
 
-    <com.github.barteksc.pdfviewer.PDFView
-        android:id="@+id/pdfView"
+    <Button
+        android:id="@+id/btnConnect"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-
+        android:layout_height="wrap_content"
+        android:text="Connect" />
+    <Button
+        android:id="@+id/btnDisconnect"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Disconnect" />
 </LinearLayout>

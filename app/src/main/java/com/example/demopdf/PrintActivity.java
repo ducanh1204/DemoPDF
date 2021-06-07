@@ -10,37 +10,31 @@ import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.print.PrintDocumentAdapter;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.mazenrashed.printooth.Printooth;
-import com.mazenrashed.printooth.data.printable.ImagePrintable;
 import com.mazenrashed.printooth.data.printable.Printable;
 import com.mazenrashed.printooth.data.printable.RawPrintable;
 import com.mazenrashed.printooth.data.printable.TextPrintable;
-import com.mazenrashed.printooth.data.printer.DefaultPrinter;
 import com.mazenrashed.printooth.ui.ScanningActivity;
 import com.mazenrashed.printooth.utilities.Printing;
 import com.mazenrashed.printooth.utilities.PrintingCallback;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
 import static com.example.demopdf.MainActivity.READ_PHONE;
 
 public class PrintActivity extends AppCompatActivity {
 
-    private Button btnPrint, btnDisconnect;
+    private Button btnPrint, btnPiarUnpair;
     private Printing printing;
     private byte[] imageByte;
     private static Bitmap bmp;
@@ -50,36 +44,67 @@ public class PrintActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_print);
         btnPrint = findViewById(R.id.btnPrint);
-        btnDisconnect = findViewById(R.id.btnDisconnect);
+        btnPiarUnpair = findViewById(R.id.btnPiarUnpair);
+
+
         if (Printooth.INSTANCE.hasPairedPrinter()) {
             printing = Printooth.INSTANCE.printer();
         }
+
         checkPermission();
+
+        initViews();
+
+
 //        imageByte = getIntent().getByteArrayExtra("imageByteArray");
 //        bmp = BitmapFactory.decodeByteArray(imageByte, 0, imageByte.length);
+
+
         initListeners();
+
+
     }
+
+    private void initViews() {
+        if (Printooth.INSTANCE.hasPairedPrinter()) {
+            btnPiarUnpair.setText("Un-pair " + Printooth.INSTANCE.getPairedPrinter().getName());
+            if (Printooth.INSTANCE.getPairedPrinter().getName() == null) {
+                btnPiarUnpair.setText("Un-pair " + Printooth.INSTANCE.getPairedPrinter().getAddress());
+            }
+        } else {
+            btnPiarUnpair.setText("Pair with printer");
+        }
+    }
+
 
     private void initListeners() {
         btnPrint.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!Printooth.INSTANCE.hasPairedPrinter())
-                    startActivityForResult(new Intent(PrintActivity.this, ScanningActivity.class), ScanningActivity.SCANNING_FOR_PRINTER);
-                else printSomePrintable();
+                    Toast.makeText(PrintActivity.this, "Chưa kết nối thiết bị", Toast.LENGTH_SHORT).show();
+                else
+                    printSomePrintable();
 
             }
         });
-
-        btnDisconnect.setOnClickListener(new View.OnClickListener() {
+        btnPiarUnpair.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                new Handler().postDelayed(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        unpairDevice();
+                    }
+                }, 1500 );
+
                 if (Printooth.INSTANCE.hasPairedPrinter()) {
                     Printooth.INSTANCE.removeCurrentPrinter();
-                    Toast.makeText(PrintActivity.this, "Đã ngắt kết nối thiết bị", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(PrintActivity.this, "Đã ngắt kết nối thiết bị", Toast.LENGTH_SHORT).show();
+                    startActivityForResult(new Intent(PrintActivity.this, ScanningActivity.class), ScanningActivity.SCANNING_FOR_PRINTER);
                 }
+                initViews();
             }
         });
         if (printing != null) {
@@ -110,12 +135,34 @@ public class PrintActivity extends AppCompatActivity {
                 }
             });
         }
-
     }
 
     private void printSomePrintable() {
         ArrayList<Printable> printables = getSomePrintables();
-        Printooth.INSTANCE.printer().print(printables);
+        if (Printooth.INSTANCE.hasPairedPrinter()) {
+            printing = Printooth.INSTANCE.printer();
+        }
+        if(printing!=null){
+            printing.print(printables);
+        }
+        Log.e("TAG", "print");
+
+    }
+
+    private void unpairDevice() {
+        Set<BluetoothDevice> pairedDevices = BluetoothAdapter.getDefaultAdapter().getBondedDevices();
+        if (pairedDevices.size() > 0) {
+            for (BluetoothDevice device : pairedDevices) {
+                try {
+                    Method m = device.getClass()
+                            .getMethod("removeBond", (Class[]) null);
+                    m.invoke(device, (Object[]) null);
+                } catch (Exception e) {
+                    Log.e("TAG", e.getMessage());
+                }
+            }
+        }
+
     }
 
     private ArrayList<Printable> getSomePrintables() {
@@ -123,7 +170,7 @@ public class PrintActivity extends AppCompatActivity {
         printables.add(new RawPrintable.Builder(new byte[]{27, 100, 4}).build());
 //        printables.add(new ImagePrintable.Builder(bmp).build());
         printables.add(new TextPrintable.Builder()
-                .setText(" Hello World : été è à '€' içi Bò Xào Coi Xanh")
+                .setText(" Hello World ")
                 .setNewLinesAfter(1)
                 .build());
         return printables;
@@ -141,8 +188,12 @@ public class PrintActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == ScanningActivity.SCANNING_FOR_PRINTER && resultCode == Activity.RESULT_OK) {
-            printSomePrintable();
-        }
+//        if (requestCode == ScanningActivity.SCANNING_FOR_PRINTER && resultCode == Activity.RESULT_OK)
+            initViews();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 }

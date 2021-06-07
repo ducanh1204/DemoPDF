@@ -14,8 +14,8 @@
         android:text="Print" />
 
     <Button
-        android:id="@+id/btnDisconnect"
+        android:id="@+id/btnPiarUnpair"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Disconnect" />
+        android:layout_height="wrap_content"/>
+
 </LinearLayout>

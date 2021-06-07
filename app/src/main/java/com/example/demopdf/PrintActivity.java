@@ -115,7 +115,7 @@ public class PrintActivity extends AppCompatActivity {
 
     private void printSomePrintable() {
         ArrayList<Printable> printables = getSomePrintables();
-        printing.print(printables);
+        Printooth.INSTANCE.printer().print(printables);
     }
 
     private ArrayList<Printable> getSomePrintables() {

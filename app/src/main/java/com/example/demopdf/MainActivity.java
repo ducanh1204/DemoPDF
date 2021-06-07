@@ -69,7 +69,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 takeScreenShot();
-
                 Bitmap bitmapa = Bitmap.createBitmap(totalWidth, totalHeight, Bitmap.Config.ARGB_8888);
                 Canvas canvas = new Canvas(bitmapa);
                 nestedScrollView.draw(canvas);
@@ -132,7 +131,6 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
             Toast.makeText(this, "Something Wrong: " + e.toString(), Toast.LENGTH_SHORT).show();
         }
-
         document.close();
     }
 }

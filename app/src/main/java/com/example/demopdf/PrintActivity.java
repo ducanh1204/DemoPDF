@@ -162,11 +162,11 @@ public class PrintActivity extends AppCompatActivity {
     private ArrayList<Printable> getSomePrintables() {
         ArrayList<Printable> printables = new ArrayList<>();
         printables.add(new RawPrintable.Builder(new byte[]{27, 100, 4}).build());
-        printables.add(new ImagePrintable.Builder(bmp).build());
 //        printables.add(new TextPrintable.Builder()
 //                .setText(" Hello World ")
 //                .setNewLinesAfter(1)
 //                .build());
+        printables.add(new ImagePrintable.Builder(bmp).build());
         return printables;
     }
 

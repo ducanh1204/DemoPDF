@@ -31,7 +31,7 @@
                 android:layout_margin="10dp"
                 android:gravity="center"
                 android:maxLines="1"
-                android:text="@string/chxh"
+                android:text="Cộng hòa xã hội chủ nghĩa Việt Nam"
                 android:textColor="@color/black" />
 
             <TextView
@@ -40,7 +40,7 @@
                 android:layout_margin="10dp"
                 android:gravity="center"
                 android:maxLines="1"
-                android:text="@string/dltd"
+                android:text="Độc lập - Tự do - Hạnh phúc"
                 android:textColor="@color/black" />
 
             <TextView
@@ -49,27 +49,23 @@
                 android:layout_margin="10dp"
                 android:gravity="center"
                 android:maxLines="1"
-                android:text="Đơn xin nghỉ học"
+                android:text="Hợp đồng thuê nhà"
                 android:textAllCaps="true"
                 android:textColor="@color/black"
                 android:textSize="20sp" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:gravity="start"
-                android:text="Kính gửi: Giáo viên chủ nhiệm lớp" />
 
             <TextView
+                android:textColor="@color/black"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:gravity="start"
                 android:maxLines="1"
-                android:text="Tên em là ………………………….………Là học sinh lớp………………….………" />
+                android:text="Tên tôi là ………………………" />
 
             <TextView
+                android:textColor="@color/black"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
@@ -77,6 +73,7 @@
                 android:text="Bắc Giang phát hiện thêm 35 ca trong khu cách ly và khu vực đã được phong tỏa, liên quan đến công nhân các khu công nghiệp, mã số 8064-8066, 8083-8112, 8114-8115." />
 
             <TextView
+                android:textColor="@color/black"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
@@ -85,6 +82,7 @@
                 android:text="Bắc Ninh có 14 trường hợp, gồm các bệnh nhân 8067-8075, 8078-8082. Trong đó, có 6 trường hợp liên quan ổ dịch Khu công nghiệp Khắc Niệm, 3 ca liên quan ổ dịch Khu công nghiệp Quế Võ, 2 người liên quan ổ dịch Thuận Thành, 3 trường hợp còn lại đang điều tra dịch tễ." />
 
             <TextView
+                android:textColor="@color/black"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
@@ -92,24 +90,7 @@
                 android:text="Hà Nội ghi nhận 2 ca mã số 8077 và 8113, gồm 1 người có tiền sử đi về từ TP.HCM và 1 F1 của ca 5243. Kết quả xét nghiệm ngày 3/6 phát hiện những người này dương tính với SARS-CoV-2." />
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:gravity="start"
-                android:text="Thái Bình có 1 bệnh nhân 8076, nữ, 75 tuổi, ở huyện Kiến Xương, liên quan đến ổ dịch cũ, đã được cách ly. Kết quả xét nghiệm ngày 3/6 của bệnh nhân dương tính với SARS-CoV-2. Hiện người này điều trị tại Bệnh viện Đa khoa tỉnh Thái Bình." />
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:gravity="start"
-                android:text="Thái Bình có 1 bệnh nhân 8076, nữ, 75 tuổi, ở huyện Kiến Xương, liên quan đến ổ dịch cũ, đã được cách ly. Kết quả xét nghiệm ngày 3/6 của bệnh nhân dương tính với SARS-CoV-2. Hiện người này điều trị tại Bệnh viện Đa khoa tỉnh Thái Bình." />
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:gravity="start"
-                android:text="Thái Bình có 1 bệnh nhân 8076, nữ, 75 tuổi, ở huyện Kiến Xương, liên quan đến ổ dịch cũ, đã được cách ly. Kết quả xét nghiệm ngày 3/6 của bệnh nhân dương tính với SARS-CoV-2. Hiện người này điều trị tại Bệnh viện Đa khoa tỉnh Thái Bình." />
-            <TextView
+                android:textColor="@color/black"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
@@ -117,6 +98,7 @@
                 android:text="Thái Bình có 1 bệnh nhân 8076, nữ, 75 tuổi, ở huyện Kiến Xương, liên quan đến ổ dịch cũ, đã được cách ly. Kết quả xét nghiệm ngày 3/6 của bệnh nhân dương tính với SARS-CoV-2. Hiện người này điều trị tại Bệnh viện Đa khoa tỉnh Thái Bình." />
 
             <TextView
+                android:textColor="@color/black"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
@@ -139,20 +121,13 @@
                         android:textColor="@color/black"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Chữ ký phụ huynh " />
+                        android:text="Chữ ký bên A" />
                     <TextView
+                        android:textColor="@color/black"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="(Ký, ghi rõ họ tên)" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Anh" />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Nguyễn Đức Anh" />
                 </LinearLayout>
                 <LinearLayout
                     android:layout_alignParentRight="true"
@@ -165,20 +140,13 @@
                         android:textColor="@color/black"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Chữ ký học sinh" />
+                        android:text="Chữ ký bên B" />
                     <TextView
+                        android:textColor="@color/black"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="(Ký, ghi rõ họ tên)" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Anh" />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Nguyễn Đức Anh" />
                 </LinearLayout>
             </RelativeLayout>
         </LinearLayout>

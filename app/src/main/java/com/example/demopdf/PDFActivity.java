@@ -4,12 +4,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
 import com.github.barteksc.pdfviewer.PDFView;
 
 import java.io.File;
+import java.io.IOException;
 
 public class PDFActivity extends AppCompatActivity {
 
@@ -40,21 +42,19 @@ public class PDFActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-//        boolean delete = false;
-//        try {
-//            delete = file.getCanonicalFile().delete();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        if(delete){
-//            Log.e("TAG","xoa thanh cong");
-//        }
+        boolean delete = false;
+        try {
+            delete = file.getCanonicalFile().delete();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if(delete){
+            Log.e("TAG","xoa thanh cong");
+        }
     }
 }

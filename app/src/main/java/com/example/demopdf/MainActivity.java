@@ -69,11 +69,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 takeScreenShot();
-                Bitmap bitmapa = Bitmap.createBitmap(totalWidth, totalHeight, Bitmap.Config.ARGB_8888);
-                Canvas canvas = new Canvas(bitmapa);
+
+                // Layout -> Bitmap
+                Bitmap intentBitmap = Bitmap.createBitmap(totalWidth, totalHeight, Bitmap.Config.ARGB_8888);
+                Canvas canvas = new Canvas(intentBitmap);
                 nestedScrollView.draw(canvas);
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                bitmapa.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                intentBitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+
+                // Bitmap -> byte[] -> intent
                 imageByteArray = stream.toByteArray();
                 Intent intent = new Intent(MainActivity.this, PDFActivity.class);
                 intent.putExtra("path", path);
@@ -85,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     public Bitmap getBitmapFromView(View view) {
+        // Layout -> Bitmap -> canvas image
         totalWidth = nestedScrollView.getChildAt(0).getWidth();
         totalHeight = nestedScrollView.getChildAt(0).getHeight();
         Bitmap returnedBitmap = Bitmap.createBitmap(totalWidth, totalHeight, Bitmap.Config.ARGB_8888);
@@ -119,9 +124,9 @@ public class MainActivity extends AppCompatActivity {
         PdfDocument.Page page = document.startPage(pageInfo);
         Canvas canvas = page.getCanvas();
         canvas.drawPaint(paint);
-        Bitmap bitmap = Bitmap.createScaledBitmap(this.bitmap, this.bitmap.getWidth(), this.bitmap.getHeight(), true);
+        Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, bitmap.getWidth(), this.bitmap.getHeight(), true);
         paint.setColor(Color.BLUE);
-        canvas.drawBitmap(bitmap, 0, 0, null);
+        canvas.drawBitmap(scaledBitmap, 0, 0, null);
         document.finishPage(page);
 
         File filePath = new File(path);

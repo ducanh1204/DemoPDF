@@ -10,6 +10,7 @@ import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -19,6 +20,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.mazenrashed.printooth.Printooth;
+import com.mazenrashed.printooth.data.printable.ImagePrintable;
 import com.mazenrashed.printooth.data.printable.Printable;
 import com.mazenrashed.printooth.data.printable.RawPrintable;
 import com.mazenrashed.printooth.data.printable.TextPrintable;
@@ -35,7 +37,7 @@ import static com.example.demopdf.MainActivity.READ_PHONE;
 public class PrintActivity extends AppCompatActivity {
 
     private Button btnPrint, btnPiarUnpair;
-    private Printing printing;
+    private Printing printing=null;
     private byte[] imageByte;
     private static Bitmap bmp;
 
@@ -46,23 +48,47 @@ public class PrintActivity extends AppCompatActivity {
         btnPrint = findViewById(R.id.btnPrint);
         btnPiarUnpair = findViewById(R.id.btnPiarUnpair);
 
+        initViews();
+        initPrinter();
+        checkPermission();
+        initListeners();
 
+        imageByte = getIntent().getByteArrayExtra("imageByteArray");
+        bmp = BitmapFactory.decodeByteArray(imageByte, 0, imageByte.length);
+    }
+
+    private void initPrinter() {
         if (Printooth.INSTANCE.hasPairedPrinter()) {
             printing = Printooth.INSTANCE.printer();
         }
+        if (printing != null) {
+            printing.setPrintingCallback(new PrintingCallback() {
+                @Override
+                public void connectingWithPrinter() {
+                    Toast.makeText(PrintActivity.this, "Connecting with printer", Toast.LENGTH_SHORT).show();
+                }
 
-        checkPermission();
+                @Override
+                public void printingOrderSentSuccessfully() {
+                    Toast.makeText(PrintActivity.this, "Order sent to printer", Toast.LENGTH_SHORT).show();
+                }
 
-        initViews();
+                @Override
+                public void connectionFailed(String s) {
+                    Toast.makeText(PrintActivity.this, "Failed to connect printer", Toast.LENGTH_SHORT).show();
+                }
 
+                @Override
+                public void onError(String s) {
+                    Toast.makeText(PrintActivity.this, s, Toast.LENGTH_SHORT).show();
+                }
 
-//        imageByte = getIntent().getByteArrayExtra("imageByteArray");
-//        bmp = BitmapFactory.decodeByteArray(imageByte, 0, imageByte.length);
-
-
-        initListeners();
-
-
+                @Override
+                public void onMessage(String s) {
+                    Toast.makeText(PrintActivity.this, "Message: " + s, Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
     }
 
     private void initViews() {
@@ -97,7 +123,7 @@ public class PrintActivity extends AppCompatActivity {
                     public void run() {
                         unpairDevice();
                     }
-                }, 1500 );
+                }, 1500);
 
                 if (Printooth.INSTANCE.hasPairedPrinter()) {
                     Printooth.INSTANCE.removeCurrentPrinter();
@@ -107,45 +133,13 @@ public class PrintActivity extends AppCompatActivity {
                 initViews();
             }
         });
-        if (printing != null) {
-            printing.setPrintingCallback(new PrintingCallback() {
-                @Override
-                public void connectingWithPrinter() {
-                    Toast.makeText(PrintActivity.this, "Connecting with printer", Toast.LENGTH_SHORT).show();
-                }
-
-                @Override
-                public void printingOrderSentSuccessfully() {
-                    Toast.makeText(PrintActivity.this, "Order sent to printer", Toast.LENGTH_SHORT).show();
-                }
-
-                @Override
-                public void connectionFailed(String s) {
-                    Toast.makeText(PrintActivity.this, "Failed to connect printer", Toast.LENGTH_SHORT).show();
-                }
-
-                @Override
-                public void onError(String s) {
-                    Toast.makeText(PrintActivity.this, s, Toast.LENGTH_SHORT).show();
-                }
-
-                @Override
-                public void onMessage(String s) {
-                    Toast.makeText(PrintActivity.this, "Message: " + s, Toast.LENGTH_SHORT).show();
-                }
-            });
-        }
     }
 
     private void printSomePrintable() {
         ArrayList<Printable> printables = getSomePrintables();
-        if (Printooth.INSTANCE.hasPairedPrinter()) {
-            printing = Printooth.INSTANCE.printer();
-        }
-        if(printing!=null){
+        if (printing != null) {
             printing.print(printables);
         }
-        Log.e("TAG", "print");
 
     }
 
@@ -168,11 +162,11 @@ public class PrintActivity extends AppCompatActivity {
     private ArrayList<Printable> getSomePrintables() {
         ArrayList<Printable> printables = new ArrayList<>();
         printables.add(new RawPrintable.Builder(new byte[]{27, 100, 4}).build());
-//        printables.add(new ImagePrintable.Builder(bmp).build());
-        printables.add(new TextPrintable.Builder()
-                .setText(" Hello World ")
-                .setNewLinesAfter(1)
-                .build());
+        printables.add(new ImagePrintable.Builder(bmp).build());
+//        printables.add(new TextPrintable.Builder()
+//                .setText(" Hello World ")
+//                .setNewLinesAfter(1)
+//                .build());
         return printables;
     }
 
@@ -188,12 +182,9 @@ public class PrintActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-//        if (requestCode == ScanningActivity.SCANNING_FOR_PRINTER && resultCode == Activity.RESULT_OK)
-            initViews();
+        if (requestCode == ScanningActivity.SCANNING_FOR_PRINTER && resultCode == Activity.RESULT_OK)
+            initPrinter();
+        initViews();
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
 }
